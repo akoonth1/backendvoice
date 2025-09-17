@@ -2,9 +2,12 @@ import mongoose from "mongoose";
 import { Schema } from "mongoose";
 
 const questionSchema = new Schema({
-  question: { type: String, required: true },
-  options: [{ type: String, required: true }],
-  answer: { type: String, required: true },
+    id : { type: String, required: true, unique: true },
+    set : { type: String, required: true },
+    question: { type: String, required: true },
+    answer: { type: String, required: false }
+
+  
 });
 
 const Question = mongoose.model("Question", questionSchema);

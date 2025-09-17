@@ -71,4 +71,5 @@ user_routes.post("/register", async (req, res) => {
   }
 });
 import User from "../models/UserSchema.mjs";
+export default user_routes;
   

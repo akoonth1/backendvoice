@@ -5,6 +5,7 @@ import path from "path";
 import { fileURLToPath } from "url";
 import audioRoutes from "./routes/audio_routes.mjs";
 import userRoutes from "./routes/user_routes.mjs";
+import questionsRoutes from "./routes/questions_routes.mjs";
 import mongoose from "mongoose";
 import db from "./config/db.mjs";
 
@@ -30,6 +31,7 @@ app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 
 app.use("/api/audio", audioRoutes);
 app.use("/api/users", userRoutes);
+app.use("/api/questions", questionsRoutes);
 
 app.get("/", (req, res) => res.send("Hello World!"));
 
