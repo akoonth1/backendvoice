@@ -1,6 +1,7 @@
 import express from "express";
 import { importQuestions } from "../scripts/import_questions.mjs";
 import Question from "../models/Question.mjs";
+import mongoose from "mongoose";
 
 const router = express.Router();
 
@@ -13,6 +14,34 @@ router.get("/questions", async (req, res) => {
     res.status(200).json(questions);
   } catch (error) {
     console.error("Error fetching questions:", error);
+    res.status(500).json({ message: "Internal server error" });
+  }
+});
+
+// GET /api/questions/questions/:id_or_qid - get single question by Mongo _id or numeric qid
+router.get("/questions/:id", async (req, res) => {
+  const { id } = req.params;
+  if (!id) return res.status(400).json({ message: "ID is required" });
+
+  try {
+    // If it's a valid ObjectId, use findById
+    if (mongoose.Types.ObjectId.isValid(id)) {
+      const question = await Question.findById(id);
+      if (!question) return res.status(404).json({ message: "Question not found" });
+      return res.status(200).json(question);
+    }
+
+    // Otherwise, if numeric, treat as qid
+    const qidNum = Number(id);
+    if (!Number.isNaN(qidNum)) {
+      const question = await Question.findOne({ qid: qidNum });
+      if (!question) return res.status(404).json({ message: "Question not found" });
+      return res.status(200).json(question);
+    }
+
+    return res.status(400).json({ message: "Invalid id or qid" });
+  } catch (error) {
+    console.error("Error fetching question:", error);
     res.status(500).json({ message: "Internal server error" });
   }
 });
