@@ -8,6 +8,7 @@ import userRoutes from "./routes/user_routes.mjs";
 import questionsRoutes from "./routes/questions_routes.mjs";
 import mongoose from "mongoose";
 import db from "./config/db.mjs";
+import cors from "cors";
 
 dotenv.config();
 
@@ -16,6 +17,9 @@ const port = process.env.PORT || 3000;
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
+
+app.use(cors()); // allow all origins (for dev)
+// To restrict: app.use(cors({ origin: "http://localhost:5173" }));
 
 // connect to DB (if db.mjs exports a connect function or mongoose connection)
 if (db && typeof db.connect === "function") {
