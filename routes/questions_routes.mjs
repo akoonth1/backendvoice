@@ -1,4 +1,5 @@
 import express from "express";
+import { importQuestions } from "../scripts/import_questions.mjs";
 import Question from "../models/Question.mjs";
 
 const router = express.Router();
@@ -33,6 +34,17 @@ router.post("/", async (req, res) => {
   } catch (err) {
     console.error(err);
     res.status(500).json({ message: "Error creating question" });
+  }
+});
+
+// GET /api/questions/bulk -> trigger import of data/questions.json
+router.get("/bulk", async (req, res) => {
+  try {
+    const count = await importQuestions();
+    res.json({ ok: true, imported: count });
+  } catch (err) {
+    console.error("Bulk import error:", err);
+    res.status(500).json({ ok: false, error: err.message || String(err) });
   }
 });
 
