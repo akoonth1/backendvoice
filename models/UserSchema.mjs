@@ -7,7 +7,8 @@ const userSchema = new Schema({
   password: { type: String, required: true },
   createdAt: { type: Date, default: Date.now },
   messages: [{ type: Array, required: false }],
-  profilePicture: { type: String, required: false }
+  profilePicture: { type: String, required: false },
+  bio : { type: String, required: false },
 
 });
 

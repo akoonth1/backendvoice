@@ -69,7 +69,37 @@ user_routes.post("/register", async (req, res) => {
     console.error("Error registering user:", error);
     res.status(500).json({ message: "Internal server error" });
   }
+
+
+
+
+  
 });
 import User from "../models/UserSchema.mjs";
+
+// PUT /users/:id - update user by Mongo _id
+user_routes.put("/users/:id", async (req, res) => {
+  const { id } = req.params;
+  const { name, email, password } = req.body;
+  if (!id) return res.status(400).json({ message: "User id is required" });
+
+  try {
+    const update = {};
+    if (name !== undefined) update.name = name;
+    if (email !== undefined) update.email = email;
+    if (password !== undefined) update.password = password;
+
+    const updatedUser = await User.findByIdAndUpdate(id, update, {
+      new: true,
+      runValidators: true,
+    });
+
+    if (!updatedUser) return res.status(404).json({ message: "User not found" });
+    res.status(200).json(updatedUser);
+  } catch (error) {
+    console.error("Error updating user:", error);
+    res.status(500).json({ message: "Internal server error" });
+  }
+});
+
 export default user_routes;
-  
